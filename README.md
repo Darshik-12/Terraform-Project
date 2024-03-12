@@ -68,9 +68,20 @@ resource "aws_route_table_association" "rta2" {
 }
 ```
 
+- The VPC created here is a Terraform VPC with the ID vpc-0091a022e6f541ddd and a CIDR block of 10.0.0.0/16.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/1e0dfe1e-e392-48c0-9429-ac7db1a61425)
+
+- Subnets created in VPC ID vpc-0091a022e6f541ddd are subnet-05ff1ee094a3c04fd with CIDR block 10.0.1.0/24 and subnet-05c27a086a20e8fbb with CIDR block 10.0.0.0/24.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/d0d486b6-0db7-4768-b97b-324da10d233c)
+
+- The internet gateway igw-013c0444903bf69ce is attached to the Terraform VPC.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/9913d576-a597-42a3-8b7a-5d61000c22c0)
+
+- I created a route table to direct internet access to the internet gateway and associated the subnets in the subnet association section. This allows both subnets to have public access.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/784b71b4-34b1-4f09-8f0e-5bf8d7a85247)
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/06414a95-ce30-4777-b103-c27c3335a0d1)
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/ea910779-4ea9-44ca-8df2-997ec82d4caf)
@@ -115,6 +126,8 @@ resource "aws_security_group" "sg" {
 }
 ```
 
+- The security group named "web-sg" has been configured to allow all traffic on port 80 (HTTP) and port 22 (SSH).
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/6f84ef17-3f17-489a-aa0c-92343a20c684)
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/ad19b064-32a8-41ad-a063-8fadeb780277)
 
@@ -139,6 +152,8 @@ resource "aws_s3_bucket" "s3b" {
   }
 }
 ```
+
+- An S3 bucket named "my-s3-bucket-darshik" has been created.
 
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/0391a1b2-87d0-4f05-ba1b-a5921c3143ac)
 
@@ -175,6 +190,12 @@ resource "aws_instance" "server2" {
   iam_instance_profile   = aws_iam_instance_profile.EC2_Instance_Profile.name
 }
 ```
+
+- An EC2 instance with Ubuntu OS, t2.micro processor, "ubuntukey" key pair, "web-sg" security group, and an IAM instance profile granting full access to an S3 bucket. The instance is configured with a shell script defined as userdata and is hosting a website.
+
+- Server 1 Public IP - 54.174.27.166
+- Server 2 Public IP - 3.238.39.112
+
 
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/76026927-ac4e-40b4-9034-52d77a328747)
 
@@ -244,6 +265,10 @@ resource "aws_lb_listener" "listener" {
   }
 }
 ```
+
+- First, I created a target group to register EC2 instances with the ALB.
+- Created an Application Load Balancer (ALB) to route traffic among both EC2 instances.
+- Since our application runs on HTTP, I added port 80 for HTTP in the listener configuration.
 
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/3579c96c-2ee1-425f-bbac-800e874cea20)
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/da099c36-e36e-4007-bb54-f345b0acc000)
@@ -321,16 +346,31 @@ resource "aws_iam_instance_profile" "EC2_Instance_Profile" {
 }
 ```
 
+- Created an IAM role granting S3 full access to AWS EC2 service and updated the IAM instance profile to named AWS_EC2_with_S3_Full_access.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/d6a1db9f-2a7b-47e6-bc91-f94d026795c9)
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/7ee3082f-1116-4eea-87f9-e060382829e2)
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/be1aef96-64a1-4c53-9b62-a928f1ca1614)
 
 
+- The screenshot of the website hosted on EC2 server 1.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/f9cd19b5-df6f-412d-9f8e-fd0ebd40c0fc)
+
+- The screenshot of the website hosted on EC2 server 2.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/ee83d8b5-6227-4830-b6df-f6000bf348b3)
 
-![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/dab8d831-287d-4414-8a64-92ccf29d414d)
-![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/805080f3-fe3d-42a7-8018-f892c4b1d58b)
+- An AWS S3 bucket is accessed by EC2, and a file named "terraform.txt" was created on server 1.
+
+![Screenshot 2024-03-11 230311](https://github.com/Darshik-12/Terraform-Project/assets/113631093/476f65a3-646c-4a5e-babb-7f7f0ac27b26)
+
+- An AWS S3 bucket is accessed by EC2, and a file named "demo.txt" was created on server 2.
+
+![Screenshot 2024-03-11 230411](https://github.com/Darshik-12/Terraform-Project/assets/113631093/c1c223b9-aa8a-4acd-9e06-9db1fdab8ea1)
+
+- The files "terraform.txt" and "demo.txt" are both visible on the AWS S3 console.
+
 ![image](https://github.com/Darshik-12/Terraform-Project/assets/113631093/59e315e4-583e-4dcc-ad03-e3763fc7a63f)
 
 
