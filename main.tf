@@ -249,9 +249,3 @@ resource "aws_iam_instance_profile" "EC2_Instance_Profile" {
   name = "Instance_Profile"
   role = aws_iam_role.iam.name
 }
-
-
-
-
-# Server 1 --> 54.174.27.166
-# Server 2 --> 3.238.39.112
